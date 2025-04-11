@@ -36,3 +36,31 @@ int main(int argc, char* argv[]) {
             return EXIT_FAILURE;
         }
         inputFile = argv[2];
+    }
+}
+ else {
+     // One argument provided: filename (default to encrypt)
+     inputFile = argv[1];
+    }
+
+    if (strlen(inputFile) == 0 || strlen(inputFile) >= MAX_FILENAME - 5) {
+        fprintf(stderr, "Error: Invalid or too long filename.\n");
+        return EXIT_FAILURE;
+    }
+
+    outputFile = get_output_filename(inputFile, encrypt);
+    if (!outputFile) {
+        return EXIT_FAILURE;
+    }
+
+    int result;
+    if (encrypt) {
+        result = encryptFile(inputFile, outputFile);
+    }
+    else {
+        result = decryptFile(inputFile, outputFile);
+    }
+
+    free(outputFile);
+    return result == 0 ? EXIT_SUCCESS : EXIT_FAILURE;
+}
